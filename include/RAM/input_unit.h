@@ -20,7 +20,7 @@
 class InputUnit {
  public:
   InputUnit() : input_head_(0), input_tape_() {}
-  void read(std::istream& is) { for(int i = 0; is >> i;) input_tape_.push_back(i); }
+  void read(std::istream& is) { for (int i; is >> i;) input_tape_.push_back(i); }
   const int& reading() { return input_tape_[input_head_++]; }
  private:
   int input_head_;
