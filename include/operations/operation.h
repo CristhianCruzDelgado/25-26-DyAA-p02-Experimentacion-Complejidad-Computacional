@@ -14,8 +14,12 @@
 #ifndef OPERATION_H_
 #define OPERATION_H_
 
+#include "../operands/operand.h"
+
 class Operation {
  public:
+  virtual ~Operation() = 0;
+  virtual void execute(const Operand*, const Operand*) const = 0;
  private:
 };
 
