@@ -16,16 +16,39 @@
 
 #include <vector>
 
+/**
+ * @class ProgramData
+ * @brief Represents the register memory of the RAM machine.
+ */
 class ProgramData {
  public:
-  ProgramData() : program_data_(std::vector<int>(32, 0)) {}
-  const int acc() const { return program_data_[0]; }
-  int& operator[](const int& i) { return program_data_[i]; }
-  const int& operator[](const int& i) const { return program_data_[i]; }
+  /** @brief Default constructor. */
+  ProgramData() : 
+    program_data_(std::vector<int>(32, 0)) {}
+  /**
+   * @brief Access register by index (modifiable).
+   * @param i Register index.
+   * @return Reference to register value.
+   * @throws std::out_of_range If index is outside valid range [0,31].
+   */
+  int& operator[](const int& i) { 
+    if (i < 0 || i >= program_data_.size()) throw std::out_of_range("Register out of range");
+    return program_data_[i]; 
+  }
+  /**
+   * @brief Access register by index (read-only).
+   * @param i Register index.
+   * @return Const reference to register value.
+   * @throws std::out_of_range If index is outside valid range [0,31].
+   */
+  const int& operator[](const int& i) const {
+    if (i < 0 || i >= program_data_.size()) throw std::out_of_range("Register out of range");
+    return program_data_[i]; 
+  }
  private:
   /* de los índices 0 a 31 suponemos que contenemos todos los registros */
   /* el registro 0 es el acumulador */
-  std::vector<int> program_data_;
+  std::vector<int> program_data_; /* Para el apto+ considerar vector de vectores */
 };
 
 #endif

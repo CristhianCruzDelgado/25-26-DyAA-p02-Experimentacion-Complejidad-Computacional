@@ -20,8 +20,29 @@
 #include "program_data.h"
 #include "program_memory.h"
 
-class RAM {
+#include <fstream>
+
+class Ram {
  public:
+  Ram() : 
+    control_unit_(), 
+    input_unit_(), 
+    output_unit_(), 
+    program_data_(), 
+    program_memory_() {}
+  void loadInputFile(std::ifstream& input_file) { input_file >> input_unit_; }
+  void loadProgramFile(std::ifstream& program_file) { program_file >> program_memory_; }
+  void run(std::ofstream& output_file) {
+    if (program_memory_.isProgramLoaded()) {
+      while (true) {
+        bool is_last_instruction = control_unit_.executeInstruction(input_unit_, output_unit_, program_data_, program_memory_);
+        if (is_last_instruction) break;
+      }
+    } else {
+      throw std::invalid_argument("Missing program");
+    }
+    output_file << output_unit_;
+  }
  private:
   ControlUnit control_unit_;
   InputUnit input_unit_;

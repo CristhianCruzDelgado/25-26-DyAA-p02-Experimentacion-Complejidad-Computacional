@@ -14,18 +14,33 @@
 #ifndef CONTROL_UNIT_H_
 #define CONTROL_UNIT_H_
 
+#include "input_unit.h"
+#include "output_unit.h"
+#include "program_data.h"
+#include "program_memory.h"
+
+#include <fstream>
+
 class ControlUnit {
  public:
   ControlUnit() : pc_(0) {} 
-  /* No sé si esto se hace aquí */
-  /* Ejecuta instrucciones */
   /* 1. get_operation() */
   /* 2. get_operand() */
   /* 3. ejecutar operation sobre operand */
-  /* 4.1. leer o escribir si procede 4.2. actualizar contador */
-  /* 5.2. incrementar contador */
+  /* 4.1. manejar resultado 4.2. actualizar contador */                       //
+  /* 5.1. incrementar contador */                                             // Implementar
+  // 4.1: leer o escribir si procede, dar por finalizado el resultado, ...    //
+  bool executeInstruction(const InputUnit& iu, const OutputUnit& ou, const ProgramData& pd, const ProgramMemory& pm) {
+    if (pc_ > pm.instructions()) return true;
+    const Operation* operation = pm.operation(pc_);
+    const Operand* acc = new Direct(0);
+    const Operand* operand = pm.operand(pc_);
+    operation->execute(acc, operand); // la operación puede necesitará leer o escribir y habrá que pasarle el parámetro ya sea de lista de entrada o de los registros 
+    /* Implementar */
+    return false;
+  }
  private:
-  /* Program counter es el índice del programa de memoria */
+  /* Program counter es cada (índice del vector) dirección de memoria */
   int pc_;
 };
 
