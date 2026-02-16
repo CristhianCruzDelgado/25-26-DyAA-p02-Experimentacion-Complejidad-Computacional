@@ -18,7 +18,11 @@
 
 class Value : public Operand {
  public:
+  Value(const int& i) : value_(i) {}
+  ~Value() {}
+  const int& get_operand(const ProgramData& pd, const ProgramMemory& pm) const override { return value_; }
  private:
+  int value_;
 };
 
 #endif

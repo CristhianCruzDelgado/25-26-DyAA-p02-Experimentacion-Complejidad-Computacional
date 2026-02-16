@@ -14,8 +14,13 @@
 #ifndef OPERAND_H_
 #define OPERAND_H_
 
+#include "../RAM/program_data.h"
+#include "../RAM/program_memory.h"
+
 class Operand {
  public:
+  virtual ~Operand() = 0;
+  virtual const int& get_operand(const ProgramData&, const ProgramMemory&) const = 0;
  private:
 };
 

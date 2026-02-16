@@ -18,7 +18,11 @@
 
 class Tag : public Operand {
  public:
+  Tag(const std::string s) : tag_(s) {}
+  ~Tag() {}
+  const int& get_operand(const ProgramData& pd, const ProgramMemory& pm) const override { return pm.translateAddress(tag_); }
  private:
+  std::string tag_;
 };
 
 #endif

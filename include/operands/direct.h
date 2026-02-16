@@ -18,7 +18,11 @@
 
 class Direct : public Operand {
  public:
+  Direct(const int& i) : register_(i) {}
+  ~Direct() {}
+  const int& get_operand(const ProgramData& pd, const ProgramMemory& pm) const override { return pd[register_]; }
  private:
+  int register_;
 };
 
 #endif
