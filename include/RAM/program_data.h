@@ -14,6 +14,7 @@
 #ifndef PROGRAM_DATA_H_
 #define PROGRAM_DATA_H_
 
+#include <exception>
 #include <vector>
 
 /**
@@ -31,7 +32,7 @@ class ProgramData {
    * @return Reference to register value.
    * @throws std::out_of_range If index is outside valid range [0,31].
    */
-  int& operator[](const int& i) { 
+  int& operator[](const size_t& i) { 
     if (i < 0 || i >= program_data_.size()) throw std::out_of_range("Register out of range");
     return program_data_[i]; 
   }
@@ -41,7 +42,7 @@ class ProgramData {
    * @return Const reference to register value.
    * @throws std::out_of_range If index is outside valid range [0,31].
    */
-  const int& operator[](const int& i) const {
+  const int& operator[](const size_t& i) const {
     if (i < 0 || i >= program_data_.size()) throw std::out_of_range("Register out of range");
     return program_data_[i]; 
   }

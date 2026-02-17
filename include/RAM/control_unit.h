@@ -18,6 +18,8 @@
 #include "output_unit.h"
 #include "program_data.h"
 #include "program_memory.h"
+#include "../operations/operation.h"
+#include "../operands/operand.h"
 
 #include <fstream>
 
@@ -31,7 +33,7 @@ class ControlUnit {
   /* 5.1. incrementar contador */                                             // Implementar
   // 4.1: leer o escribir si procede, dar por finalizado el resultado, ...    //
   bool executeInstruction(const InputUnit& iu, const OutputUnit& ou, const ProgramData& pd, const ProgramMemory& pm) {
-    if (pc_ > pm.instructions()) return true;
+    if (pc_ > pm.numberOfInstructions()) return true;
     const Operation* operation = pm.operation(pc_);
     const Operand* acc = new Direct(0);
     const Operand* operand = pm.operand(pc_);
@@ -40,8 +42,8 @@ class ControlUnit {
     return false;
   }
  private:
-  /* Program counter es cada (índice del vector) dirección de memoria */
-  int pc_;
+  /* Program counter es cada índice del vector */
+  size_t pc_;
 };
 
 #endif

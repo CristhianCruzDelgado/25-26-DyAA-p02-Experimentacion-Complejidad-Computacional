@@ -12,34 +12,39 @@
  * Description: executes a RAM program
  */
 
-#include "../include/RAM/control_unit.h"
-#include "../include/RAM/input_unit.h"
-#include "../include/RAM/output_unit.h"
-#include "../include/RAM/program_data.h"
-#include "../include/RAM/program_memory.h"
 #include "../include/RAM/ram.h"
 
 #include <exception>
+#include <fstream>
 #include <iostream>
 
 const char* HELP_MESSAGE = "Help: This program executes a RAM program. \
-                            \nTry: \
-                            ./simulador-RAM ~ Executable \
-                            xxx.ram ~ RAM Program \
-                            xxx.input ~ Input tape \
-                            xxx.output ~ Output tape \
-                            \n";
+                            \nTry: ./simulador-RAM ~ Executable \
+                            \ntestx.ram ~ RAM program file \
+                            \ntestx.input ~ Input tape file \
+                            \ntestx.output ~ Output tape file\n";
 
 int main(int argc, char* argv[]) {
   try {
-    if (argc == 2) if (argv[1] == "--help") std::cout << HELP_MESSAGE;
-    if (argc != 4) throw std::invalid_argument("Bad args");
+    if (argc == 2 && std::string(argv[1]) == "--help") {
+      std::cout << HELP_MESSAGE; 
+      return 0;
+    }
+    if (argc != 4) throw std::invalid_argument("Missing arguments");
 
-// La ejecución comienza en la primera instrucción del programa, con todos los registros de la memoria vacíos y con los datos de entrada cargados en la cinta de entrada.
-// Se ejecuta una instrucción, se modifican los registros de memoria necesarios o la cinta de salida y, acto seguido, se pasa a la ejecución de la siguiente instrucción.
-// Las instrucciones READ y WRITE leen y escriben en las cintas correspondientes, y en ambos casos se avanza una posición en la cinta.
-// El programa termina cuando no hay más instrucciones a ejecutar, por un error o cuando se encuentra la instrucción HALT.
+    Ram ram;
 
+    std::ifstream input_file(argv[1]);
+    if (!input_file) throw std::runtime_error("Bad input tape file");
+    ram.loadInputFile(input_file);
+
+    std::ifstream program_file(argv[2]);
+    if (!program_file) throw std::runtime_error("Bad RAM program file");
+    ram.loadProgramFile(program_file);
+
+    std::ofstream output_file(argv[3]);
+    if (!output_file) throw std::runtime_error("Bad output tape file");
+    ram.run(output_file);
 
   } catch (const std::exception& e) {
     std::cerr << "\nerror: " << e.what() << "\n";

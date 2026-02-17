@@ -33,13 +33,10 @@ class Ram {
   void loadInputFile(std::ifstream& input_file) { input_file >> input_unit_; }
   void loadProgramFile(std::ifstream& program_file) { program_file >> program_memory_; }
   void run(std::ofstream& output_file) {
-    if (program_memory_.isProgramLoaded()) {
-      while (true) {
-        bool is_last_instruction = control_unit_.executeInstruction(input_unit_, output_unit_, program_data_, program_memory_);
-        if (is_last_instruction) break;
-      }
-    } else {
-      throw std::invalid_argument("Missing program");
+    if (!program_memory_.isProgramLoaded()) throw std::runtime_error("Missing RAM program");
+    while (true) {
+      bool is_last_instruction = control_unit_.executeInstruction(input_unit_, output_unit_, program_data_, program_memory_);
+      if (is_last_instruction) break;
     }
     output_file << output_unit_;
   }

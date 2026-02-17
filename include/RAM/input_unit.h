@@ -14,6 +14,7 @@
 #ifndef INPUT_UNIT_H_
 #define INPUT_UNIT_H_
 
+#include <exception>
 #include <iostream>
 #include <vector>
 
@@ -43,18 +44,13 @@ class InputUnit {
    * @throw std::out_of_range If the head goes beyond the end of the tape.
    */
   int reading() { 
-    if (!is_input_loaded_) {
-      throw std::runtime_error("Missing input");
-    }
-    if (input_head_ < input_tape_.size()) {
-      return input_tape_[input_head_++]; 
-    } else {
-      throw std::out_of_range("Input head out of range");
-    }
+    if (!is_input_loaded_) throw std::runtime_error("Missing input tape");
+    if (input_head_ >= input_tape_.size()) throw std::out_of_range("Input head out of range");
+    return input_tape_[input_head_++]; 
   }
  private:
   bool is_input_loaded_;             ///< Indicates whether the tape has been loaded
-  int input_head_;                   ///< Index of the next element to read
+  size_t input_head_;                ///< Index of the next element to read
   std::vector<int> input_tape_;      ///< Vector storing the integers on the tape
 };
 

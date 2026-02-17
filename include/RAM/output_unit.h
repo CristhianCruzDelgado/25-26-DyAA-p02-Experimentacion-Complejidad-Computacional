@@ -32,8 +32,7 @@ class OutputUnit {
    * @param os Output stream where integers are write.
    */
   void write(std::ostream& os) const { 
-    for (const int& number : output_tape_) 
-      os << number << ""; 
+    for (const int& number : output_tape_) os << number << ""; 
   }
   /**
    * @brief Appends a integer to the output tape and advances the head.
@@ -44,7 +43,7 @@ class OutputUnit {
     ++output_head_; 
   }
  private:
-  int output_head_;                   ///< Index of the next element to write
+  size_t output_head_;                ///< Index of the next element to write
   std::vector<int> output_tape_;      ///< Vector storing the integers on the tape
 };
 
