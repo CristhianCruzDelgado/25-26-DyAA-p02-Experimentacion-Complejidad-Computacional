@@ -23,7 +23,7 @@ Contact emails
 * <alu0101648293@ull.edu.es>
 * <alu0101651217@ull.edu.es>
 
-This code was designed for Diseño y Análisis de Algoritmos, \
+This code was designed for Design and Analysis of Algorithms, \
 signature of the Computer Engineering degree, \
 that is studied at the Univeridad de La Laguna.
 
