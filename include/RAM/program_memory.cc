@@ -23,25 +23,30 @@ static void validateInstruction(Operation* operation, Operand* operand, const in
   bool isIndirect = dynamic_cast<Indirect*>(operand);
   bool isTag      = dynamic_cast<Tag*>(operand);
 
+  // Comprobar que HALT no tiene operando
   if (isHalt && operand != nullptr) {
     throw std::runtime_error("HALT cannot have operand at line " + std::to_string(lineNumber));
   }
 
+  // READ y STORE deben tener operando directo o indirecto
   if (!operand || isValue || isTag) {
     if (isRead) throw std::runtime_error("READ requires direct or indirect operand at line " + std::to_string(lineNumber));
     if (isStore) throw std::runtime_error("STORE requires direct or indirect operand at line " + std::to_string(lineNumber));
   }
 
-  if (isWrite && !operand) throw std::runtime_error("WRITE requires operand at line " + std::to_string(lineNumber));
-
+  // WRITE debe tener operando directo o indirecto o valor constante
+  if ((isWrite && !operand) || (isWrite && isTag)) throw std::runtime_error("WRITE requires direct or indirect operand or value at line " + std::to_string(lineNumber));
+  
+  // Operaciones aritméticas deben tener operando direto o indirecto o valor constante
   if (!isRead && !isWrite && !isStore && !isJump && !isJzero && !isJgtz && !isHalt) {
     if (!operand) throw std::runtime_error("Missing operand at line " + std::to_string(lineNumber));
     if (isTag) throw std::runtime_error("Arithmetic instructions cannot use label operand at line " + std::to_string(lineNumber));
   }
 
+  //  Operaciones de control deben tener etiqueta como operando
   if (isJump || isJzero || isJgtz) {
     if (!operand) throw std::runtime_error("Jump instructions requires operand at line " + std::to_string(lineNumber));
-    if (isDirect || isIndirect) throw std::runtime_error("Jump cannot use register operand at line " + std::to_string(lineNumber));
+    if (isDirect || isIndirect || isValue) throw std::runtime_error("Jump needs tag operand at line " + std::to_string(lineNumber));
   }
 }
 
