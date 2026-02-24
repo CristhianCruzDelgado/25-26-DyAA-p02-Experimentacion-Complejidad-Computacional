@@ -19,6 +19,7 @@
 #include "../operations/sub.h"
 #include "../operations/mul.h"
 #include "../operations/div.h"
+#include "../operations/exp.h"
 #include "../operations/read.h"
 #include "../operations/write.h"
 #include "../operations/store.h"

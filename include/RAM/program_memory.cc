@@ -53,7 +53,7 @@ void ProgramMemory::read(std::istream& is) {
 
   std::string line;
   const std::regex r_tags(R"(^([a-zA-Z0-9_]+):)");
-  const std::regex r_operations(R"(^\b(add|div|halt|jgtz|jump|jzero|load|mul|read|store|sub|write|ADD|DIV|HALT|JGTZ|JUMP|JZERO|LOAD|MUL|READ|STORE|SUB|WRITE)\b)");
+  const std::regex r_operations(R"(^\b(add|div|exp|halt|jgtz|jump|jzero|load|mul|read|store|sub|write|ADD|DIV|EXP|HALT|JGTZ|JUMP|JZERO|LOAD|MUL|READ|STORE|SUB|WRITE)\b)");
   const std::regex r_operands(R"(=(\d+)|\*(\d+)|(\d+)|([a-zA-Z0-9_]+))");
 
   while (std::getline(is, line)) {
@@ -87,6 +87,7 @@ void ProgramMemory::read(std::istream& is) {
       else if (op == "sub" || op == "SUB")     operation = new Sub();
       else if (op == "mul" || op == "MUL")     operation = new Mul();
       else if (op == "div" || op == "DIV")     operation = new Div();
+      else if (op == "exp" || op == "EXP")     operation = new Exp();
       else if (op == "load" || op == "LOAD")   operation = new Load();
       else if (op == "store" || op == "STORE") operation = new Store();
       else if (op == "read" || op == "READ")   operation = new Read();
