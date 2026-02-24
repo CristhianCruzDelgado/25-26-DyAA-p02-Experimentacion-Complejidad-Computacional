@@ -21,7 +21,6 @@ class Operation {
  public:
   virtual ~Operation() = default;
   virtual void execute(Ram& ram, const Operand* operand) const = 0;
- private:
 };
 
 #endif

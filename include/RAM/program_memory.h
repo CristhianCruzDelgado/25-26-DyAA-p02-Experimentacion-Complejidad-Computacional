@@ -38,7 +38,7 @@
 #include <map>
 #include <regex>
 #include <string>
-#include <utility> // <pair>
+#include <utility>
 #include <vector>
 
 class Operation;
@@ -54,7 +54,19 @@ class ProgramMemory {
     is_program_loaded_(false), 
     program_memory_(), 
     cells_memory_() {}
-  /** declared in program_memory.cc */
+  /**
+   * @brief Reads the program from an input stream line by line.
+   * The method performs the following steps for each line of the input:
+   *   1. Ignores empty lines and comment lines.
+   *   2. Detects labels (e.g., "0001", "ETIQ", "LOOP") and maps them to the current instruction index.
+   *   3. Identifies the operation, creating the corresponding Operation object (e.g., ADD, DIV, HALT).
+   *   4. Identifies the operand, creating the corresponding Operand object (e.g., Value, Direct, Indirect).
+   *   5. Combines the operation and operand into an Instruction and appends it
+   *      to the program memory vector, maintaining the instruction index.
+   * After processing all lines, the program is marked as loaded.
+   * @param is Input stream containing the program.
+   * @throws std::invalid_argument if an operation or operand is missing or invalid.
+   */  
   void read(std::istream&);
   /**
    * @brief Checks if a program has been loaded.

@@ -21,7 +21,9 @@ class Ram;
 
 class ControlUnit {
  public:
-  ControlUnit() : pc_(0), halt_(false) {} 
+  ControlUnit() : 
+    pc_(0), 
+    halt_(false) {} 
 
   size_t getPC() const { return pc_; }
   void setPC(const size_t& address) { pc_ = address; }

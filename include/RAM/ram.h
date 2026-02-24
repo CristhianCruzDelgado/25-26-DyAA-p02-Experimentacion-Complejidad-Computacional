@@ -25,11 +25,14 @@
 
 class Ram {
  public:
-  Ram();
-
-  // getters
-  ControlUnit& getControlUnit();
-  const ControlUnit& getControlUnit() const;
+  Ram() : 
+    control_unit_(), 
+    input_unit_(), 
+    output_unit_(), 
+    program_data_(), 
+    program_memory_() {}
+  ControlUnit& getControlUnit() { return control_unit_; }
+  const ControlUnit& getControlUnit() const { return control_unit_; };
   InputUnit& getInputUnit() { return input_unit_; }
   const InputUnit& getInputUnit() const { return input_unit_; }
   OutputUnit& getOutputUnit() { return output_unit_; }
@@ -38,10 +41,8 @@ class Ram {
   const ProgramData& getProgramData() const { return program_data_; }
   ProgramMemory& getProgramMemory() { return program_memory_;}
   const ProgramMemory& getProgramMemory() const { return program_memory_;}
-
   void loadInputFile(std::ifstream& input_file) { input_file >> input_unit_; }
   void loadProgramFile(std::ifstream& program_file) { program_file >> program_memory_; }
-
   void run(std::ofstream& output_file);
 
  private:

@@ -24,44 +24,27 @@ static void validateInstruction(Operation* operation, Operand* operand, const in
   bool isTag      = dynamic_cast<Tag*>(operand);
 
   if (isHalt && operand != nullptr) {
-    throw std::invalid_argument("HALT cannot have operand at line " + std::to_string(lineNumber));
+    throw std::runtime_error("HALT cannot have operand at line " + std::to_string(lineNumber));
   }
 
   if (!operand || isValue || isTag) {
-    if (isRead) throw std::invalid_argument("READ requires direct or indirect operand at line " + std::to_string(lineNumber));
-    if (isStore) throw std::invalid_argument("STORE requires direct or indirect operand at line " + std::to_string(lineNumber));
+    if (isRead) throw std::runtime_error("READ requires direct or indirect operand at line " + std::to_string(lineNumber));
+    if (isStore) throw std::runtime_error("STORE requires direct or indirect operand at line " + std::to_string(lineNumber));
   }
 
-  if (isWrite && !operand) throw std::invalid_argument("WRITE requires operand at line " + std::to_string(lineNumber));
+  if (isWrite && !operand) throw std::runtime_error("WRITE requires operand at line " + std::to_string(lineNumber));
 
-  // Aritméticas
   if (!isRead && !isWrite && !isStore && !isJump && !isJzero && !isJgtz && !isHalt) {
-    if (!operand) throw std::invalid_argument("Missing operand at line " + std::to_string(lineNumber));
-    if (isTag) throw std::invalid_argument("Arithmetic instructions cannot use label operand at line " + std::to_string(lineNumber));
+    if (!operand) throw std::runtime_error("Missing operand at line " + std::to_string(lineNumber));
+    if (isTag) throw std::runtime_error("Arithmetic instructions cannot use label operand at line " + std::to_string(lineNumber));
   }
 
-  // Saltos
   if (isJump || isJzero || isJgtz) {
-    if (!operand) throw std::invalid_argument("Jump instruction requires operand at line " + std::to_string(lineNumber));
-    if (isDirect || isIndirect) throw std::invalid_argument("Jump cannot use register operand at line " + std::to_string(lineNumber));
+    if (!operand) throw std::runtime_error("Jump instructions requires operand at line " + std::to_string(lineNumber));
+    if (isDirect || isIndirect) throw std::runtime_error("Jump cannot use register operand at line " + std::to_string(lineNumber));
   }
-
-
 }
 
-/**
- * @brief Reads the program from an input stream line by line.
- * The method performs the following steps for each line of the input:
- *   1. Ignores empty lines and comment lines.
- *   2. Detects labels (e.g., "0001", "ETIQ", "LOOP") and maps them to the current instruction index.
- *   3. Identifies the operation, creating the corresponding Operation object (e.g., ADD, DIV, HALT).
- *   4. Identifies the operand, creating the corresponding Operand object (e.g., Value, Direct, Indirect).
- *   5. Combines the operation and operand into an Instruction and appends it
- *      to the program memory vector, maintaining the instruction index.
- * After processing all lines, the program is marked as loaded.
- * @param is Input stream containing the program.
- * @throws std::invalid_argument if an operation or operand is missing or invalid.
- */
 void ProgramMemory::read(std::istream& is) {
   program_memory_.clear();
   cells_memory_.clear();
@@ -100,43 +83,39 @@ void ProgramMemory::read(std::istream& is) {
     if (std::regex_search(line, matches, r_operations)) {
       std::string op = matches[1].str();
 
-      if (op == "add" || op == "ADD") operation = new Add();
-      else if (op == "sub" || op == "SUB") operation = new Sub();
-      else if (op == "mul" || op == "MUL")   operation = new Mul();
-      else if (op == "div" || op == "DIV")   operation = new Div();
-      else if (op == "load" || op == "LOAD")  operation = new Load();
+      if (op == "add" || op == "ADD")          operation = new Add();
+      else if (op == "sub" || op == "SUB")     operation = new Sub();
+      else if (op == "mul" || op == "MUL")     operation = new Mul();
+      else if (op == "div" || op == "DIV")     operation = new Div();
+      else if (op == "load" || op == "LOAD")   operation = new Load();
       else if (op == "store" || op == "STORE") operation = new Store();
-      else if (op == "read" || op == "READ")  operation = new Read();
+      else if (op == "read" || op == "READ")   operation = new Read();
       else if (op == "write" || op == "WRITE") operation = new Write();
-      else if (op == "jump" || op == "JUMP")  operation = new Jump();
+      else if (op == "jump" || op == "JUMP")   operation = new Jump();
       else if (op == "jzero" || op == "JZERO") operation = new Jzero();
-      else if (op == "jgtz" || op == "JGTZ")  operation = new Jgtz();
-      else if (op == "halt" || op == "HALT")  operation = new Halt();
+      else if (op == "jgtz" || op == "JGTZ")   operation = new Jgtz();
+      else if (op == "halt" || op == "HALT")   operation = new Halt();
       else {
-        throw std::invalid_argument("Unknown operation at line " + std::to_string(program_file_line));
+        throw std::runtime_error("Unknown operation at line " + std::to_string(program_file_line));
       }
 
       line = line.substr(matches[0].length());
       line = trim(line);
 
     } else {
-      throw std::invalid_argument("Missing operation at line " + std::to_string(program_file_line));
+      throw std::runtime_error("Missing operation at line " + std::to_string(program_file_line));
     }
 
     // Extraer operando si hay
     Operand* operand = nullptr;
     if (!line.empty()) {
       if (std::regex_search(line, matches, r_operands)) {
-        if (matches[1] != "") {
-          operand = new Value(std::stoi(matches[1]));
-        } else if (matches[2] != "") {
-          operand = new Indirect(std::stoi(matches[2]));
-        } else if (matches[3] != "") {
-          operand = new Direct(std::stoi(matches[3]));
-        } else if (matches[4] != "") {
-          operand = new Tag(matches[4].str());
-        } else {
-          throw std::invalid_argument("Bad operand at line " + std::to_string(program_file_line));
+        if (matches[1] != "")      operand = new Value(std::stoi(matches[1]));
+        else if (matches[2] != "") operand = new Indirect(std::stoi(matches[2]));
+        else if (matches[3] != "") operand = new Direct(std::stoi(matches[3]));
+        else if (matches[4] != "") operand = new Tag(matches[4].str());
+        else {
+          throw std::runtime_error("Bad operand at line " + std::to_string(program_file_line));
         }
 
         line = line.substr(matches[0].length());
@@ -145,11 +124,10 @@ void ProgramMemory::read(std::istream& is) {
     }
     
     if (!line.empty()) {
-      throw std::invalid_argument("Unexpected text at end of line " + std::to_string(program_file_line));
+      throw std::runtime_error("Unexpected text at end of line " + std::to_string(program_file_line));
     }
 
     validateInstruction(operation, operand, program_file_line);
-
     Instruction instruction{operation, operand};
     program_memory_.push_back(instruction);
     ++program_memory_line;

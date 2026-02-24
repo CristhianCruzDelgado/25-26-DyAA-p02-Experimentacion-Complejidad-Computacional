@@ -16,8 +16,6 @@
 
 #include "operand.h"
 
-class Operand;
-
 class Direct : public Operand {
  public:
   Direct(const int& i) : register_(i) {}

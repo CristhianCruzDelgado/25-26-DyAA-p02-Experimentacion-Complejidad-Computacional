@@ -49,7 +49,7 @@ class ProgramData {
  private:
   /* de los índices 0 a 31 suponemos que contenemos todos los registros */
   /* el registro 0 es el acumulador */
-  std::vector<int> program_data_; /* Para el apto+ considerar vector de vectores */
+  std::vector<int> program_data_;
 };
 
 #endif
