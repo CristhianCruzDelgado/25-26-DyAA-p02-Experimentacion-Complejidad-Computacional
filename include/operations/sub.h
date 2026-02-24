@@ -18,7 +18,7 @@
 
 class Sub : public Operation {
  public:
- private:
+  void execute(Ram& ram, const Operand* operand) const override;
 };
 
 #endif

@@ -16,11 +16,13 @@
 
 #include "operand.h"
 
+class Operand;
+
 class Direct : public Operand {
  public:
   Direct(const int& i) : register_(i) {}
-  ~Direct() {}
-  const int& get_operand(const ProgramData& pd, const ProgramMemory& pm) const override { return pd[register_]; }
+  int getOperand(const Ram& ram) const override;
+  int getRegister(const Ram& ram) const override;
  private:
   int register_;
 };

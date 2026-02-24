@@ -20,8 +20,8 @@
 
 const char* HELP_MESSAGE = "Help: This program executes a RAM program. \
                             \nTry: ./simulador-RAM ~ Executable \
-                            \ntestx.ram ~ RAM program file \
                             \ntestx.input ~ Input tape file \
+                            \ntestx.ram ~ RAM program file \
                             \ntestx.output ~ Output tape file\n";
 
 int main(int argc, char* argv[]) {

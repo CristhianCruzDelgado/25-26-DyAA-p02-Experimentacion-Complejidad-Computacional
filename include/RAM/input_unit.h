@@ -55,6 +55,6 @@ class InputUnit {
 };
 
 /** @brief Stream extraction operator to load the tape from an input stream. */
-std::istream& operator>>(std::istream& is, InputUnit& iu) { iu.read(is); return is; }
+inline std::istream& operator>>(std::istream& is, InputUnit& iu) { iu.read(is); return is; }
 
 #endif

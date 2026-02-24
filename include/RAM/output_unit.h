@@ -32,7 +32,7 @@ class OutputUnit {
    * @param os Output stream where integers are write.
    */
   void write(std::ostream& os) const { 
-    for (const int& number : output_tape_) os << number << ""; 
+    for (const int& number : output_tape_) os << number << " "; 
   }
   /**
    * @brief Appends a integer to the output tape and advances the head.
@@ -48,6 +48,6 @@ class OutputUnit {
 };
 
 /** @brief Stream insertion operator for OutputUnit. */
-std::ostream& operator<<(std::ostream& os, const OutputUnit& ou) { ou.write(os); return os; }
+inline std::ostream& operator<<(std::ostream& os, const OutputUnit& ou) { ou.write(os); return os; }
 
 #endif

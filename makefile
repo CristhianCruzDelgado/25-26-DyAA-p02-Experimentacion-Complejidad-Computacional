@@ -11,10 +11,11 @@
 # Description: organizer code
 
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall
+CXXFLAGS = -std=c++17 -Wall -Iinclude
 
 EXE = simulador-RAM
-SRC = $(wildcard src/*.cc)
+
+SRC = $(shell find src include -name "*.cc")
 OBJ = $(SRC:.cc=.o)
 
 all: $(EXE)
@@ -26,6 +27,7 @@ $(EXE): $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f src/*.o $(EXE)
+	find src include -name "*.o" -delete
+	rm -f $(EXE)
 
 .PHONY: clean

@@ -16,9 +16,11 @@
 
 #include "operation.h"
 
+class Operand;
+
 class Mul : public Operation {
  public:
- private:
+  void execute(Ram& ram, const Operand* operand) const override;
 };
 
 #endif
